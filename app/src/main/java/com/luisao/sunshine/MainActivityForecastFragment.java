@@ -81,7 +81,7 @@ public class MainActivityForecastFragment extends Fragment {
                         "Sun 6/29 - Sunny - 20/7"
                         };
         List<String> weekForecast = new ArrayList<>(Arrays.asList(forecastArray));
-        mForecastAdapter = new ArrayAdapter<String>(
+        mForecastAdapter = new ArrayAdapter<>(
                 getActivity(), // The current context (this activity)
                 R.layout.list_item_forecast, // The name of the layout ID.
                 R.id.list_item_forecast_textview, // The ID of the textview to populate.
@@ -117,8 +117,7 @@ public class MainActivityForecastFragment extends Fragment {
             long roundedHigh = Math.round(high);
             long roundedLow = Math.round(low);
 
-            String highLowStr = roundedHigh + "/" + roundedLow;
-            return highLowStr;
+            return roundedHigh + "/" + roundedLow;
         }
 
         /**
@@ -166,7 +165,8 @@ public class MainActivityForecastFragment extends Fragment {
                 gc.add(GregorianCalendar.DATE, i);
                 //get that date, format it, and "save" it on variable day
                 Date time = gc.getTime();
-                SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
+                SimpleDateFormat shortenedDateFormat;
+                shortenedDateFormat = new SimpleDateFormat("EEE MMM dd");
                 day = shortenedDateFormat.format(time);
 
                 // description is in a child array called "weather", which is 1 element long.
@@ -243,11 +243,12 @@ public class MainActivityForecastFragment extends Fragment {
 
                 // Read the input stream into a String
                 InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
+                StringBuilder buffer = new StringBuilder();
                 if (inputStream == null) {
                     // Nothing to do.
                     forecastJsonStr = null;
                 }
+                assert inputStream != null;
                 reader = new BufferedReader(new InputStreamReader(inputStream));
 
                 String line;
@@ -255,7 +256,7 @@ public class MainActivityForecastFragment extends Fragment {
                     // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                     // But it does make debugging a *lot* easier if you print out the completed
                     // buffer for debugging.
-                    buffer.append(line + "\n");
+                    buffer.append(line).append("\n");
                 }
 
                 if (buffer.length() == 0) {
